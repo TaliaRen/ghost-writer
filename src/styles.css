@@ -1,0 +1,274 @@
+:root {
+  --bg: #120e0b;
+  --bg-lift: #1c1612;
+  --ink: #ece3d0;
+  --ink-dim: rgba(236, 227, 208, 0.5);
+  --ink-faint: rgba(236, 227, 208, 0.28);
+  --ember: #b8642c;
+  --ember-soft: rgba(184, 100, 44, 0.32);
+  --serif: 'EB Garamond', 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', Georgia, serif;
+  --text-size: 32px;
+  --line: 1.55;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 38%, var(--bg-lift) 0%, transparent 70%),
+    radial-gradient(ellipse 120% 80% at 50% 120%, rgba(184, 100, 44, 0.05) 0%, transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: clip;
+}
+
+/* The open air above the page where ghosts drift. */
+.sky {
+  width: min(960px, 100%);
+  height: clamp(240px, 44vh, 460px);
+  flex: none;
+}
+
+/* ------------------------------------------------------------------ editor */
+
+.page {
+  width: min(820px, calc(100% - 32px));
+  padding-bottom: 30vh;
+}
+
+/* The typing box. Padding lives here, not on .ink, so the textarea and the
+   backdrop keep identical text metrics. */
+.editor {
+  position: relative;
+  padding: 26px 32px 28px;
+  border: 1px solid rgba(236, 227, 208, 0.13);
+  border-radius: 16px;
+  background: rgba(236, 227, 208, 0.025);
+  cursor: text;
+  transition: border-color 300ms, box-shadow 300ms, background-color 300ms;
+}
+
+.editor:focus-within {
+  border-color: rgba(184, 100, 44, 0.42);
+  background: rgba(236, 227, 208, 0.035);
+  box-shadow: 0 0 0 5px rgba(184, 100, 44, 0.07), 0 20px 60px -30px rgba(0, 0, 0, 0.8);
+}
+
+.editor .input {
+  inset: 26px 32px 28px;
+  width: calc(100% - 64px);
+  height: calc(100% - 54px);
+}
+
+.ink {
+  margin: 0;
+  padding: 0 0 4px;
+  border: 0;
+  font-family: var(--serif);
+  font-size: var(--text-size);
+  line-height: var(--line);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+  tab-size: 4;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+}
+
+.backdrop {
+  min-height: calc(var(--text-size) * var(--line));
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.backdrop .hold {
+  color: transparent;
+}
+
+.backdrop .reveal {
+  animation: reveal 260ms ease-out both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0.25;
+    text-shadow: 0 0 14px rgba(246, 238, 222, 0.6);
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 0 rgba(246, 238, 222, 0);
+  }
+}
+
+.backdrop .placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  caret-color: var(--ember);
+  outline: none;
+  display: block;
+}
+
+.input::selection {
+  background: var(--ember-soft);
+  color: transparent;
+}
+
+/* During IME composition the textarea paints its own text. */
+.composing .input {
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink);
+}
+
+.composing .backdrop {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------------- ghosts */
+
+.ghost-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.ghost-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ghost-eyes ellipse {
+  fill: rgb(14, 12, 11);
+  fill-opacity: 0.62;
+}
+
+/* The deleted words, faint inside the gauze like a lingering memory. */
+.ghost-text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max-content;
+  max-width: 150px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-family: var(--serif);
+  line-height: 1.12;
+  color: var(--ink);
+  will-change: transform, opacity;
+}
+
+/* Only on touch screens (phones, tablets): a quiet undo under the box. */
+.touch-undo {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Just an icon and a word; it floats under the box's right edge without
+     taking layout space, so the box itself stays centred. */
+  .touch-undo {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 4px;
+    border: 0;
+    background: none;
+    color: var(--ink-dim);
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: color 200ms, opacity 260ms, transform 260ms;
+  }
+  .touch-undo:active:not(:disabled) {
+    color: var(--ember);
+  }
+  /* Hidden until a deletion happens; keeps its space so nothing jumps. */
+  .touch-undo:not(.is-shown) {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+  .touch-undo.is-shown {
+    opacity: 1;
+    transform: none;
+  }
+  .editor-anchor {
+    position: relative;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --text-size: 24px;
+  }
+  .editor {
+    padding: 18px 20px 20px;
+  }
+  .editor .input {
+    inset: 18px 20px 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 38px);
+  }
+  .app {
+    justify-content: center;
+  }
+  .sky {
+    height: clamp(170px, 30dvh, 300px);
+  }
+  .page {
+    padding-bottom: clamp(170px, 30dvh, 300px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop .reveal {
+    animation-duration: 120ms;
+  }
+}

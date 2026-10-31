@@ -9,9 +9,6 @@ the page as a thin, translucent ghost and drifts in the air above the line.
 Undo, and the ghost is pulled back head-first into the sentence, turning into
 ordinary text again.
 
-被删除的文字不会消失，而是化作一缕薄纱般的幽灵，飘在你写字的地方上方。
-撤销时，它们会被吸回句子里。
-
 <p>
   <img src="docs/phone-ghost.png" width="260" alt="A deleted word floating as a ghost above the text box" />
   <img src="docs/phone-ghosts.png" width="260" alt="Several ghosts drifting above the text box" />

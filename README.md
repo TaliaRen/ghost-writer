@@ -2,6 +2,8 @@
 
 > Nothing you delete really leaves.
 
+**Live:** https://taliaren.github.io/ghost-writer/
+
 A small Halloween writing toy. Text you delete doesn't disappear — it rises off
 the page as a thin, translucent ghost and drifts in the air above the line.
 Undo, and the ghost is pulled back head-first into the sentence, turning into

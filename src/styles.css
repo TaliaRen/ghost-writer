@@ -271,6 +271,30 @@ body {
   .editor-anchor {
     position: relative;
   }
+
+  /* The page is a fixed frame that follows the visible area, so iOS cannot
+     pan it under the status bar when the keyboard opens (see viewport.ts). */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+  .app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    height: var(--app-height, 100vh);
+    min-height: 0;
+    -webkit-transform: translateY(var(--vv-top, 0px));
+    transform: translateY(var(--vv-top, 0px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Stay clear of the host's status bar and top buttons. */
+    padding-top: 0;
+    padding-top: var(--top-reserve, var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+  }
 }
 
 @media (max-width: 640px) {
@@ -305,4 +329,26 @@ body {
   .backdrop .reveal {
     animation-duration: 120ms;
   }
+}
+
+/* Keyboard open (touch screens): the box sits just above the keyboard and
+   the ghosts use whatever space is left above it. */
+.kb-open .app {
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+}
+.kb-open .sky {
+  height: auto;
+  -webkit-box-flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.kb-open .page {
+  padding-bottom: 12px;
+}
+/* Below the box is under the keyboard now, so Undo moves above it. */
+.kb-open .touch-undo {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 2px;
 }

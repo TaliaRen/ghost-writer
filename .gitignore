@@ -6,3 +6,6 @@ dist/
 mobile-preview/
 *.tsbuildinfo
 release/
+
+# Personal drafts and recordings; not part of the build (publicDir is off)
+public/

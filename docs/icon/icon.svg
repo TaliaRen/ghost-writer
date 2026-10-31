@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="78%">
+      <stop offset="0" stop-color="#2a211b"/>
+      <stop offset="0.55" stop-color="#16110d"/>
+      <stop offset="1" stop-color="#0c0907"/>
+    </radialGradient>
+    <linearGradient id="veil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6efe2" stop-opacity="0.8"/>
+      <stop offset="0.5" stop-color="#efe6d6" stop-opacity="0.56"/>
+      <stop offset="0.85" stop-color="#e9dfcc" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#e9dfcc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf7ef" stop-opacity="0"/>
+      <stop offset="0.4" stop-color="#fbf7ef" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#fbf7ef" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f3e9d8" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#f3e9d8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="blur" x="-50%" y="-20%" width="200%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="ink" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="0.8"/></filter>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <ellipse cx="512" cy="380" rx="320" ry="300" fill="url(#glow)"/>
+
+  <!-- ghost rising out of the text box -->
+  <g transform="rotate(-3 512 400)">
+    <path filter="url(#soft)" fill="url(#veil)" d="
+      M 322 372
+      C 322 238, 408 140, 512 140
+      C 616 140, 702 238, 702 372
+      C 702 470, 710 560, 738 640
+      C 746 662, 728 676, 708 668
+      C 680 656, 664 684, 636 696
+      C 606 708, 590 678, 558 686
+      C 526 694, 512 724, 480 714
+      C 448 704, 444 676, 414 680
+      C 384 684, 366 708, 342 696
+      C 318 684, 322 654, 318 620
+      C 312 540, 322 460, 322 372 Z"/>
+    <path filter="url(#blur)" fill="url(#fold)" d="M 410 520 C 406 590, 404 640, 392 690 L 412 694 C 424 640, 426 590, 424 520 Z"/>
+    <path filter="url(#blur)" fill="url(#fold)" d="M 604 510 C 614 580, 624 630, 646 680 L 664 672 C 642 630, 630 580, 620 510 Z"/>
+    <!-- eyes -->
+    <ellipse cx="462" cy="318" rx="15" ry="20" fill="#120e0b" fill-opacity="0.8"/>
+    <ellipse cx="562" cy="318" rx="15" ry="20" fill="#120e0b" fill-opacity="0.8"/>
+    <!-- the word it carries -->
+    <text x="512" y="506" text-anchor="middle" font-size="84" font-weight="500"
+          font-family="'EB Garamond', Garamond, Georgia, serif" letter-spacing="1"
+          fill="#2a1f18" fill-opacity="0.66" filter="url(#ink)">Goodbye</text>
+  </g>
+
+  <!-- the text box it came from -->
+  <rect x="196" y="742" width="632" height="150" rx="44" fill="#ece3d0" fill-opacity="0.035"
+        stroke="#c46d32" stroke-opacity="0.75" stroke-width="5"/>
+  <rect x="262" y="815" width="250" height="7" rx="3.5" fill="#ece3d0" fill-opacity="0.3"/>
+  <rect x="536" y="782" width="10" height="72" rx="5" fill="#c46d32"/>
+</svg>

@@ -1,13 +1,13 @@
 {
   "name": "ghost-writer",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "pack:minitool": "npm run build && mkdir -p release && rm -f release/ghost-writer-minitool.zip && cd dist && zip -r -X ../release/ghost-writer-minitool.zip . -x '*.DS_Store' -x '*.map'"
+    "pack:minitool": "npm run build && node scripts/check-minitool.mjs dist && mkdir -p release && cd dist && zip -r -X \"../release/ghost-writer-minitool-v$npm_package_version.zip\" . -x '*.DS_Store' -x '*.map'"
   },
   "dependencies": {
     "@fontsource/eb-garamond": "^5.1.1",

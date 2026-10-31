@@ -26,6 +26,10 @@ export default defineConfig(({ command }) => ({
   // Relative asset paths: required inside the zip, and lets the site work
   // from a sub-path such as https://<user>.github.io/ghost-writer/.
   base: command === 'build' ? './' : '/',
+  // Nothing is copied in from public/: every file in the build is referenced
+  // from the code or index.html, so stray files (recordings, drafts) can never
+  // end up in the mini-tool zip.
+  publicDir: false,
   build: {
     // Baseline: Android 8.1 WebView (Chrome 61).
     target: ['es2017', 'chrome61'],

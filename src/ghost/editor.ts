@@ -423,7 +423,7 @@ export class GhostWriter {
     if (!v) {
       const ph = document.createElement('span');
       ph.className = 'placeholder';
-      ph.textContent = 'Write something you might regret…';
+      ph.textContent = 'The page is empty, but the ghosts remember.';
       bd.appendChild(ph);
     } else if (v.endsWith('\n')) {
       bd.appendChild(document.createTextNode('​'));

@@ -104,6 +104,7 @@ interface Ghost {
   brFreq: number;
   twFreq: number;
   asym: number;
+  lean: number; // personal hem direction: negative = left, positive = right
   jitter: number;
   foldA: number[];
   foldV: number[];
@@ -164,7 +165,8 @@ function windAt(x: number, t: number) {
   const u = t - x / 240;
   const base = 0.55 * Math.sin(u * 0.21 + 1.3) + 0.3 * Math.sin(u * 0.53 + 0.4) + 0.15 * Math.sin(u * 1.13 + 2.1);
   const gust = Math.pow(Math.max(0, Math.sin(u * 0.17 + 0.6)), 6);
-  return base * 0.55 + gust * (0.9 + 0.2 * Math.sin(u * 2.3));
+  const gustDir = Math.sin(u * 0.071 + 2.2); // gusts come from either side
+  return base * 0.55 + gust * gustDir * (0.6 + 0.15 * Math.sin(u * 2.3));
 }
 
 /** Keep `p` within `max` radians of straight down from `anchor`. */
@@ -508,6 +510,7 @@ export class GhostLayer {
       brFreq: 0.55 + Math.random() * 0.35,
       twFreq: 0.3 + Math.random() * 0.25,
       asym: (Math.random() - 0.5) * 0.14,
+      lean: (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.4),
       jitter: 0.92 + Math.random() * 0.16,
       foldA: [-0.42 + Math.random() * 0.12, -0.05 + Math.random() * 0.12, 0.3 + Math.random() * 0.14],
       foldV: [0.3 + Math.random() * 0.15, 0.18 + Math.random() * 0.15, 0.35 + Math.random() * 0.15],
@@ -543,7 +546,8 @@ export class GhostLayer {
     let best = { x: (b.minX + b.maxX) / 2, y: (b.minY + b.maxY) / 2, score: -Infinity };
     for (let i = 0; i < 24; i++) {
       const x = lerp(b.minX, b.maxX, Math.random());
-      const y = lerp(b.minY, b.maxY, Math.random());
+      // Stay in the lower part of the sky, close to the writing.
+      const y = lerp(lerp(b.minY, b.maxY, 0.45), b.maxY, Math.random());
       let score = 1e6;
       for (const o of others) score = Math.min(score, Math.hypot(o.homeX - x, (o.homeY - y) * 1.2) - (o.R + g.R) * 1.3);
       score += Math.random() * 20; // a little randomness so layouts differ
@@ -883,13 +887,15 @@ export class GhostLayer {
     rm: boolean,
     cone: number,
   ) {
+    // Personal lean, slowly breathing so a hem sometimes eases to the other side.
+    const lean = rm ? 0 : g.lean + 0.35 * Math.sin(performance.now() / 1000 * 0.11 + g.seed);
     const kM = 22 * stiff;
     const cM = 6.5 * Math.sqrt(stiff);
     const kE = 9 * stiff;
     const cE = 3.9 * Math.sqrt(stiff);
 
     const mr = {
-      x: head.x + rest.x * L * 0.5 + wind * R * 0.26,
+      x: head.x + rest.x * L * 0.5 + (wind * 0.35 + lean * 0.6) * R * 0.26,
       y: head.y + rest.y * L * 0.5 - Math.abs(wind) * R * 0.05,
     };
     let ax = (mr.x - g.M.x) * kM - g.Mv.x * cM;
@@ -920,7 +926,7 @@ export class GhostLayer {
     const hm = norm(g.M.x - head.x, g.M.y - head.y);
     const dir = norm(lerp(rest.x, hm.x, 0.7), lerp(rest.y, hm.y, 0.7));
     const er = {
-      x: g.M.x + dir.x * L * 0.5 + wind * R * 0.42,
+      x: g.M.x + dir.x * L * 0.5 + (wind * 0.35 + lean * 1.2) * R * 0.42,
       y: g.M.y + dir.y * L * 0.5 - Math.abs(wind) * R * 0.12,
     };
     g.Ev.x += ((er.x - g.E.x) * kE - g.Ev.x * cE + bx) * dt;

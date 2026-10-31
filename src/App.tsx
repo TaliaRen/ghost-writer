@@ -31,7 +31,19 @@ export default function App() {
       ta.focus({ preventScroll: true });
       ta.setSelectionRange(ta.value.length, ta.value.length);
     }
+    // Track the visible height (soft keyboard, container chrome) so the
+    // layout can keep the box centred in what the reader can actually see.
+    const vv = window.visualViewport;
+    const syncHeight = () => {
+      const h = vv ? vv.height : window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', `${Math.round(h)}px`);
+    };
+    syncHeight();
+    vv?.addEventListener('resize', syncHeight);
+    window.addEventListener('resize', syncHeight);
     return () => {
+      vv?.removeEventListener('resize', syncHeight);
+      window.removeEventListener('resize', syncHeight);
       w.destroy();
       writer.current = null;
     };

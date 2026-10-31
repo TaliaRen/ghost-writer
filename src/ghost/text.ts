@@ -55,8 +55,8 @@ export const hasVisible = (s: string) => /\S/u.test(s);
 
 /** Offsets of the visible part of `s` (leading/trailing whitespace trimmed). */
 export function trimOffsets(s: string): [number, number] {
-  const lead = s.length - s.trimStart().length;
-  const trail = s.length - s.trimEnd().length;
+  const lead = s.length - s.replace(/^\s+/u, '').length;
+  const trail = s.length - s.replace(/\s+$/u, '').length;
   return [lead, s.length - trail];
 }
 

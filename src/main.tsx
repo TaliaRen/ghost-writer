@@ -1,5 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@fontsource/eb-garamond/latin-400.css';
+import '@fontsource/eb-garamond/latin-500.css';
+import '@fontsource/eb-garamond/latin-400-italic.css';
 import App from './App';
 import './styles.css';
 

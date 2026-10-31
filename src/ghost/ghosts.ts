@@ -228,6 +228,7 @@ export class GhostLayer {
     document.addEventListener('pointerleave', this.onLeave);
     window.addEventListener('blur', this.onLeave);
     window.addEventListener('resize', this.onResize);
+    window.visualViewport?.addEventListener('resize', this.onResize);
   }
 
   destroy() {
@@ -239,6 +240,7 @@ export class GhostLayer {
     document.removeEventListener('pointerleave', this.onLeave);
     window.removeEventListener('blur', this.onLeave);
     window.removeEventListener('resize', this.onResize);
+    window.visualViewport?.removeEventListener('resize', this.onResize);
     this.layer.textContent = '';
     this.ghosts.clear();
   }
